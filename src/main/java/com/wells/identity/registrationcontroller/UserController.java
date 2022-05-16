@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
+import org.springframework.web.bind.annotation.CrossOrigin;
 import com.wells.identity.common.exceptions.DatbaseconnectivityException;
 import com.wells.identity.common.exceptions.InvalidCredientialsExcepion;
 import com.wells.identity.constants.Constants;
@@ -21,6 +21,7 @@ import com.wells.identity.response.UserRegisterReponse;
 import com.wells.identity.services.JWTService;
 import com.wells.identity.utility.AESEncryptionDecryption;
 
+@CrossOrigin("*")
 @RestController
 @RequestMapping("/api/v1")
 public class UserController {
@@ -33,7 +34,7 @@ public class UserController {
 	@Autowired
 	JWTService jwtService;
 
-	
+
 	@PostMapping("/user/registeration")
 	public ResponseEntity<UserRegisterReponse> createUserRegistration(@Valid @RequestBody UserRegisterRequest userRegisterRequest)
 			throws DatbaseconnectivityException {
@@ -80,15 +81,11 @@ public class UserController {
 		if ( loginRequest.getEmpId().trim().equalsIgnoreCase(Constants.ADMIN) && loginRequest.getPassword().trim().equalsIgnoreCase(Constants.ADMIN)) {
 			String generateToken = jwtService.generateTokenforAdmin(loginRequest);
 			return ResponseEntity.ok().body(new LoginResponse("Success", generateToken));
-			
+
 		} else{
 			throw new InvalidCredientialsExcepion("Invalid Password");
 		}
-	
+
 	}
 
 }
-
-
-
-
